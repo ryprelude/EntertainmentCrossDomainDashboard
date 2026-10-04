@@ -1,13 +1,7 @@
 # Entertainment Cross-Domain Data Dashboard
 
-**스트리밍·상품 판매·이벤트를 하나의 콘텐츠 축으로 살펴봅니다.**
-
 여러 엔터테인먼트 사업의 가상 데이터를 검증하고 SQLite에 통합하여,
 콘텐츠별 성과와 월별 추이를 시각화하는 소규모 학습용 프로젝트입니다.
-
-`Python` · `Pandas` · `SQLite` · `Streamlit`
-
-**Collect → Validate → Store → Integrate → Analyze → Visualize**
 
 일본어판: [README.md](README.md)
 
@@ -53,7 +47,7 @@ DB는 임시 파일에 완전히 기록한 후 기존 파일을 교체합니다.
 
 ## 3. 데이터셋
 
-대상 기간은 **2025-01~2025-12**, 통화는 **JPY(정수 엔화)**입니다.
+대상 기간은 **2025-01~2025-12**, 통화는 **JPY(엔화)**입니다.
 
 | CSV / 테이블 | 행 수 | 한 행의 단위·고유 키 | 컬럼과 단위 |
 |---|---:|---|---|
@@ -97,7 +91,7 @@ DB에는 업무 키의 UNIQUE 인덱스를 생성하고, 나머지 검증은 Pyt
 
 ## 5. 교차 도메인 분석
 
-**각 사업 데이터를 콘텐츠 단위로 먼저 집계한 다음 결과를 JOIN합니다.**
+각 사업 데이터를 콘텐츠 단위로 먼저 집계한 다음 결과를 JOIN합니다.
 
 예를 들어 콘텐츠 하나에 스트리밍 12행·상품 판매 12행·이벤트 4행이 있다면,
 원본 데이터를 `content_id`만으로 바로 JOIN할 경우 576행으로 늘어나 합계가 부풀려집니다.
@@ -139,7 +133,7 @@ SQL의 기간·콘텐츠 조건은 파라미터로 전달하고 연결에는 `mo
 **Python 3.12를 권장합니다.** Python 3.12 / Pandas 2.2.3 / Streamlit 1.64.0에서 동작을 확인했습니다.
 SQLite와 unittest는 Python 표준 라이브러리이며 API 키나 외부 DB는 필요하지 않습니다.
 
-ZIP 압축을 풀거나 저장소를 clone한 뒤 `app.py`가 있는 폴더에서 실행하세요.
+ZIP 압축을 풀거나 저장소를 clone한 뒤 `app.py`가 있는 폴더에서 실행하십시오.
 
 ### Windows / PowerShell
 
@@ -165,7 +159,7 @@ python3 -m venv .venv
 
 브라우저에서 `http://localhost:8501`을 엽니다. 종료하려면 터미널에서 `Ctrl+C`를 누릅니다.
 CSV가 포함되어 있으므로 생성 명령은 생략할 수 있습니다. 다시 생성하면 기존 CSV를 덮어씁니다.
-CSV를 수정했다면 `src.load_data`를 다시 실행하고 브라우저를 새로고침하세요.
+CSV를 수정했다면 `src.load_data`를 다시 실행하고 브라우저를 새로고침하십시오.
 
 가상환경을 활성화한 뒤에는 다음과 같이 짧게 실행할 수도 있습니다.
 
@@ -174,7 +168,7 @@ python -m src.analysis
 python -m unittest discover -s tests -v
 ```
 
-테스트 전에 `python -m src.load_data`를 실행하세요.
+테스트 전에 `python -m src.load_data`를 실행하십시오.
 DB가 없으면 UI 테스트는 건너뛰며 파이프라인 테스트는 임시 폴더를 사용합니다.
 
 | 단계 | 실행 확인 |
