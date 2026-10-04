@@ -9,7 +9,7 @@
 
 **Collect → Validate → Store → Integrate → Analyze → Visualize**
 
-韓国語の実行・コード学習ガイド: [START_HERE_KO.md](docs/START_HERE_KO.md)
+韓国語版: [README_KO.md](README_KO.md)
 
 ## 1. Project Overview
 
@@ -21,17 +21,7 @@
 すべて架空の名称・数値です。実在企業の内部システムやデータを再現したものではありません。
 自然言語からSQLを生成する機能は、このMVPには含めていません。
 
-## 2. Motivation
-
-カバー株式会社のEngineering Meet-up 2026に参加し、複数の事業領域にまたがる
-データを集約し、正しく横断的に活用するという考え方に興味を持ちました。
-その考え方を理解するため、CSVの収集から検証・保存・集計・可視化までを
-小さな環境で一通り扱うことを目標にしています。
-
-高度な基盤の導入よりも、処理の流れを自分で読んで説明できる規模を優先しました。
-実装・検証・ドキュメント作成にはChatGPT/Codexを活用しています。
-
-## 3. Architecture
+## 2. Architecture
 
 ```mermaid
 flowchart TD
@@ -61,7 +51,7 @@ DBは一時ファイルへ完全に書き込んでから置き換えます。
 繰り返しロードしても既存行への追記は行わず、重複を増やしません。
 データ量が小さいため、複雑なジョブ基盤やキャッシュは使用していません。
 
-## 4. Dataset
+## 3. Dataset
 
 対象期間は **2025-01〜2025-12**、通貨は **JPY（整数の円）** です。
 
@@ -80,7 +70,7 @@ DBは一時ファイルへ完全に書き込んでから置き換えます。
 - `C007`と`C008`にはイベントを設定していません。イベントのないコンテンツも表示されます。
 - このMock Dataでは欠けた事業行を「記録された活動なし」として0表示します。実務では未着データとの区別が必要です。
 
-## 5. Data Validation
+## 4. Data Validation
 
 全カラムを必須とし、次を検証します。
 
@@ -105,7 +95,7 @@ Validation passed.
 空の事業テーブルは許容し、空のコンテンツマスターは拒否します。
 DB側には業務キーのUNIQUEインデックスを作成し、その他の検証はPythonで実施します。
 
-## 6. Cross-domain Analysis
+## 5. Cross-domain Analysis
 
 **各事業を先にコンテンツ単位で集計し、その結果をJOINします。**
 
@@ -144,17 +134,7 @@ SQLの期間・コンテンツ条件はパラメーターで渡し、接続は`m
 散布図では単位の異なる再生回数と売上を別々の軸に置いています。
 関連が見えても、配信が物販を増加させたという因果関係は示せません。
 
-## 7. Dashboard Screenshot
-
-実際のStreamlitアプリで、標準seed・全期間を表示した画面です。
-
-![Company overview](docs/dashboard.png)
-
-- **Company overview:** 4つのKPI、月別配信推移、コンテンツ別物販売上、散布図
-- **Content explorer:** コンテンツ選択、個別KPI、指標を切り替える月別グラフ
-- **Data quality:** 読み込み済みDBの検証結果。CSV編集後は再ロードが必要
-
-## 8. How to Run
+## 6. How to Run
 
 **Python 3.12推奨。** Python 3.12 / Pandas 2.2.3 / Streamlit 1.64.0で動作確認しています。
 SQLiteとunittestはPython標準ライブラリです。APIキーや外部DBは不要です。
@@ -202,31 +182,12 @@ DBがない場合、UIテストはスキップされます。パイプライン�
 | 1. CSV生成・検証 | `python -m src.generate_data` → `python -m src.validate` |
 | 2. 保存・集計 | `python -m src.load_data` → `python -m src.analysis` |
 | 3. UI | `python -m streamlit run app.py` |
-| 4. 文書・検証 | README、スクリーンショット、テスト結果 |
+| 4. 回帰テスト | `python -m unittest discover -s tests -v` |
 
-## 9. What I Learned
-
-この実装から確認できる学習ポイントです。
-
-1. **一か所で使う:** 共通キーと粒度を定めると、異なる事業のデータを組み合わせられる。
-2. **正しく使う:** 保存前の検証に加え、JOINの順序やKPIの定義も集計の正確さに影響する。
-3. **安全に扱う:** 架空データ・読み取り専用接続・パラメーター化SQLを小さな範囲で適用できる。
-4. **変化を見る:** 全体推移とコンテンツ別の内訳を分けると、異なる側面を比較できる。
-
-これは個人のローカル学習用です。認証・権限管理・監査ログ・本番運用の可用性は未実装です。
-データガバナンス全体を実装したと主張するものではありません。
-
-## 10. Future Improvements
+## 7. Future Improvements
 
 - 未着データとゼロ活動を区別する取り込み状態の管理
 - 同日複数イベントに対応する`event_id`の追加
 - 検証履歴や取り込み時刻の保存
 - データ辞書と品質ルールの拡充
 - MVPを理解した後の自然言語→SQL（読み取り専用制約・実行制限を含む）
-
-## References
-
-- [Streamlit chart documentation](https://docs.streamlit.io/develop/api-reference/charts/st.scatter_chart)
-- [Streamlit app testing](https://docs.streamlit.io/develop/api-reference/app-testing)
-- [Pandas DataFrame.to_sql](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html)
-- [Python sqlite3](https://docs.python.org/3/library/sqlite3.html)
